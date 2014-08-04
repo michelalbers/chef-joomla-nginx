@@ -1,0 +1,52 @@
+server {
+  listen   80;
+  server_name  <%= node['hostname'] %>;
+  server_name_in_redirect off;
+
+  root   <%= node['nginx']['default_root'] %>;
+  index index.php index.html index.htm default.html default.htm;
+
+  access_log  <%= node['nginx']['log_dir'] %>/joomla.access.log;
+  error_log  <%= node['nginx']['log_dir'] %>/joomla.error.log;
+  
+  # Support Clean (aka Search Engine Friendly) URLs
+  location / {
+    try_files $uri $uri/ /index.php?$args;
+  }
+
+  # deny running scripts inside writable directories
+    location ~* /(images|cache|media|logs|tmp)/.*\.(php|pl|py|jsp|asp|sh|cgi)$ {
+    return 403;
+    error_page 403 /403_error.html;
+  }
+
+  location ~ \.php$ {
+    try_files $uri =404;
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/var/run/php-fpm-www.sock;
+    fastcgi_index index.php;
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+  }
+
+  # caching of files 
+    location ~* \.(ico|pdf|flv)$ {
+    expires 1y;
+  }
+
+  location ~* \.(js|css|png|jpg|jpeg|gif|swf|xml|txt)$ {
+    expires 14d;
+  }
+
+  # GZip Compression
+  gzip on;
+  gzip_http_version 1.1;
+  gzip_comp_level 6;
+  gzip_min_length 1100;
+  gzip_buffers 4 8k;
+  gzip_types text/plain application/xhtml+xml text/css application/xml application/xml+rss text/javascript application/javascript application/x-javascr$
+  gzip_proxied     any;
+  gzip_disable     "MSIE [1-6]\.";
+
+}
