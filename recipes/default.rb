@@ -20,7 +20,7 @@ end
 
 # Enable PHP Error Logging
 php_fpm_pool "www" do
-  php_options 'php_flag[display_errors]' => 'on', 'php_admin_flag[display_errors]' => 'on', 'php_admin_value[memory_limit]' => '1024M', 'php_admin_value[upload_max_filesize]' => '1024M', 'php_admin_value[post_max_size]' => '1024M'
+  php_options 'php_flag[display_errors]' => 'on', 'php_admin_flag[display_errors]' => 'on', 'php_admin_value[memory_limit]' => '1024M', 'php_admin_value[upload_max_filesize]' => '1024M', 'php_admin_value[post_max_size]' => '1024M', 'php_admin_value[max_execution_time]' => 300, 'php_admin_value[max_input_time]' => 300
 end
 
 # Install php-mysql
@@ -30,6 +30,11 @@ end
 
 # Install php5-gd
 apt_package "php5-gd" do
+  action :install
+end
+
+# Install php5-curl
+apt_package "php5-curl" do
   action :install
 end
 
