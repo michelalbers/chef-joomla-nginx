@@ -42,3 +42,8 @@ end
 apt_package "graphicsmagick" do
   action :install
 end
+
+# Install sendmail
+apt_package "sendmail" do
+  action :install
+end
