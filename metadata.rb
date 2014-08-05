@@ -5,3 +5,4 @@ license 'MIT'
 description 'Loads typo3 specific nginx config'
 version '1.0.2'
 depends 'nginx'
+depends "php-fpm"
